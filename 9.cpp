@@ -20,6 +20,12 @@ class Map {
       return graph[r][c];
     }
 
+    int get_basin(int r, int c) {
+      if (!is_lowpoint(r, c)) {
+        return -1;
+      }
+    }
+
     bool is_lowpoint(int r, int c) {
       if (get_height(r + 1, c) <= get_height(r, c)) {
         return false;
