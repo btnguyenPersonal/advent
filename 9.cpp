@@ -49,16 +49,24 @@ class Map {
         return true;
       }
       if (get_height(r + 1, c) == get_height(r, c) - 1) {
-        return is_connected_to(r + 1, c, r_low, c_low);
+        if (is_connected_to(r + 1, c, r_low, c_low)) {
+          return true;
+        }
       }
       if (get_height(r - 1, c) == get_height(r, c) - 1) {
-        return is_connected_to(r - 1, c, r_low, c_low);
+        if(is_connected_to(r - 1, c, r_low, c_low)) {
+          return true;
+        }
       }
       if (get_height(r, c + 1) == get_height(r, c) - 1) {
-        return is_connected_to(r, c + 1, r_low, c_low);
+        if(is_connected_to(r, c + 1, r_low, c_low)) {
+          return true;
+        }
       }
       if (get_height(r, c - 1) == get_height(r, c) - 1) {
-        return is_connected_to(r, c - 1, r_low, c_low);
+        if(is_connected_to(r, c - 1, r_low, c_low)) {
+          return true;
+        }
       }
       return false;
     }
