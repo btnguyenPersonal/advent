@@ -35,8 +35,81 @@ int binary_to_decimal(std::string input) {
   return output;
 }
 
-int main() {
-  std::cout << binary_to_decimal("011111100101") << std::endl;
-  return 0;
+int get_packet_id(std::string input) {
+  return binary_to_decimal(input.substr(3, 3));
 }
 
+int get_packet_version(std::string input) {
+  return binary_to_decimal(input.substr(0, 3));
+}
+
+int get_length(std::string input) {
+  if (get_packet_id(input) == 4) {
+    int i = 6;
+    bool last_packet = false;
+    std::string binary_output;
+    while(!last_packet) {
+      if (input.substr(i, 1) == "0") {
+        last_packet = true;
+      }
+      binary_output += input.substr(i + 1, 4);
+      i += 5;
+    }
+    return i;
+  } else {
+    if (input.substr(6, 1) == "0") {
+      std::cout << "15 " << input.substr(7, 15) << std::endl;
+      return 7 + 15 + binary_to_decimal(input.substr(7, 15));
+    } else {
+      std::cout << "11 " << binary_to_decimal(input.substr(7, 11)) << std::endl;
+      return 7 + 11 + 11 * binary_to_decimal(input.substr(7, 11));
+    }
+  }
+}
+
+/* int get_packet(std::string input) { */
+/*   if (get_packet_id(input) == 4) { */
+/*     int i = 6; */
+/*     bool last_packet = false; */
+/*     std::string binary_output; */
+/*     while(!last_packet) { */
+/*       if (input.substr(i, 1) == "0") { */
+/*         last_packet = true; */
+/*       } */
+/*       binary_output += input.substr(i + 1, 4); */
+/*       i += 5; */
+/*     } */
+/*     std::cout << binary_output << std::endl; */
+/*     return binary_to_decimal(binary_output); */
+/*   } else { */
+/*     int length; */
+/*     hex_to_binary(input.substr(6, 1)) == "1" ? length = 11: length = 15; */
+/*     int i = 7; */
+/*     bool last_packet = false; */
+/*     std::string binary_output; */
+/*     while(!last_packet) { */
+/*       if (input.substr(i, 1) == "0") { */
+/*         last_packet = true; */
+/*       } */
+/*       binary_output += input.substr(i + 1, length); */
+/*       i += length + 1; */
+/*     } */
+/*     std::cout << binary_output << std::endl; */
+/*     return binary_to_decimal(binary_output); */
+/*   } */
+/* } */
+
+int main() {
+  std::ifstream f("16input.txt");
+  std::string s;
+  f >> s;
+  std::string binary = hex_to_binary(s);
+  int sum = 0;
+  for (int i = 0; i < 10; i++) {
+    sum += get_packet_version(binary);
+    std::cout << binary <<std::endl;
+    binary = binary.substr(get_length(binary));
+    std::cout << binary <<std::endl;
+  }
+  return 0;
+}
